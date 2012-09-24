@@ -29,7 +29,8 @@ import urllib,urllib2
 import simplejson as json
 import re
 import sys
-
+import SimpleDownloader as downloader
+downloader = downloader.SimpleDownloader()
 
 URL_PLUGIN=    'plugin://music/MixCloud/'
 URL_API=       'http://api.mixcloud.com/'
@@ -39,7 +40,8 @@ URL_NEW=       'http://api.mixcloud.com/new/'
 URL_POPULAR=   'http://api.mixcloud.com/popular/'
 URL_SEARCH=    'http://api.mixcloud.com/search/'
 URL_STREAM=    'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
-
+URL_FAVS=      'https://api.mixcloud.com/me/favorites/'
+URL_FOLLOWING= 'https://api.mixcloud.com/me/following/'
 
 
 MODE_HOME=       0
@@ -51,7 +53,8 @@ MODE_CATEGORIES=20
 MODE_USERS=     21
 MODE_SEARCH=    30
 MODE_PLAY=      40
-
+MODE_FAVS=      50
+MODE_FOLLOWING= 60
 
 
 STR_ARTIST=      u'artist'
@@ -84,19 +87,17 @@ STR_TRACKNUMBER= u'tracknumber'
 STR_TYPE=        u'type'
 STR_USER=        u'user'
 STR_YEAR=        u'year'
+STR_TOKEN=       u'access_token'
+STR_FOLLOWING=   u'following'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
-
-
 plugin_handle=int(sys.argv[1])
-
-
 
 __settings__ =xbmcaddon.Addon('plugin.audio.mixcloud')
 limit=(1+int(__settings__.getSetting('page_limit')))*10
 thumb_size=STR_THUMB_SIZES[int(__settings__.getSetting('thumb_size'))]
-
+token=(__settings__.getSetting('access_token'))
 
 
 def add_audio_item(infolabels,parameters={},img='',total=0):
@@ -125,6 +126,8 @@ def show_home_menu():
     add_folder_item(name="Categories",parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
     add_folder_item(name="Search",parameters={STR_MODE:MODE_SEARCH})
     add_folder_item(name="History",parameters={STR_MODE:MODE_HISTORY})
+    add_folder_item(name="Favorites",parameters={STR_MODE:MODE_FAVS})
+    add_folder_item(name="Following",parameters={STR_MODE:MODE_FOLLOWING})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -153,6 +156,14 @@ def show_popular_menu(offset):
 
 
 
+def show_favorites_menu(offset):
+    found=get_cloudcasts(URL_FAVS,{STR_TOKEN:token,STR_LIMIT:limit,STR_OFFSET:offset})
+    if found==limit:
+        add_folder_item(name="Favorites",parameters={STR_MODE:MODE_FAVS,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)   
+    
+    
+
 def show_categories_menu(key,offset):
     if key=='':
         get_categories(URL_CATEGORIES)
@@ -160,6 +171,16 @@ def show_categories_menu(key,offset):
         found=get_cloudcasts(URL_API+key[1:len(key)-1]+'/cloudcasts/',{STR_LIMIT:limit,STR_OFFSET:offset})
         if found==limit:
             add_folder_item(name="More...",parameters={STR_MODE:MODE_CATEGORIES,STR_KEY:key,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+def show_following_menu(offset):
+    if key=='':
+        get_following(URL_FOLLOWING,{STR_TOKEN:token})
+    else:
+        found=get_cloudcasts(URL_API+key[1:len(key)-1]+'/cloudcasts/',{STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name="More...",parameters={STR_MODE:MODE_FOLLOWING,STR_KEY:key,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -348,6 +369,29 @@ def get_categories(url):
                 add_folder_item(name=json_name,parameters={STR_MODE:MODE_CATEGORIES,STR_KEY:json_key},img=json_thumbnail)
 
 
+def get_following(url,parameters):
+    url=url+'?'+urllib.urlencode(parameters)
+    h=urllib2.urlopen(url)
+    content=h.read()
+    json_content=json.loads(content)
+    if STR_DATA in json_content and json_content[STR_DATA]:
+        json_data=json_content[STR_DATA]
+        for json_following in json_data:
+            if STR_NAME in json_following and json_following[STR_NAME]:
+                json_name=json_following[STR_NAME]
+                json_key=''
+                json_format=''
+                json_thumbnail=''
+                if STR_KEY in json_following and json_following[STR_KEY]:
+                    json_key=json_following[STR_KEY]
+                if STR_FORMAT in json_following and json_following[STR_FORMAT]:
+                    json_format=json_following[STR_FORMAT]
+                if STR_PICTURES in json_following and json_following[STR_PICTURES]:
+                    json_pictures=json_following[STR_PICTURES]
+                    if thumb_size in json_pictures and json_pictures[thumb_size]:
+                        json_thumbnail=json_pictures[thumb_size]
+                add_folder_item(name=json_name,parameters={STR_MODE:MODE_FOLLOWING,STR_KEY:json_key},img=json_thumbnail)
+                
 
 def get_users(url,parameters):
     found=0
@@ -411,6 +455,8 @@ def add_to_settinglist(name,value,maxname):
     __settings__.setSetting(name,', '.join(settinglist))
 
 
+  
+
 
 params=parameters_string_to_dict(urllib.unquote(sys.argv[2]))
 mode=int(params.get(STR_MODE,"0"))
@@ -441,5 +487,9 @@ elif mode==MODE_SEARCH:
     ok=show_search_menu(key,query,offset)
 elif mode==MODE_HISTORY:
     ok=show_history_menu(offset)
+elif mode==MODE_FAVS:
+    ok=show_favorites_menu(offset)
+elif mode==MODE_FOLLOWING:
+    ok=show_following_menu(offset)
 elif mode==MODE_PLAY:
     ok=play_cloudcast(key)

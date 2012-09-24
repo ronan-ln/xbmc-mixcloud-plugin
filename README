@@ -24,3 +24,31 @@ Features:
 Todo:
   - Foolproof error handling
 ============================================  
+
+Howto retrieve an oauth token
+
+  In order to use the "favorites" and "following"
+  features one needs to setup an oauth token.
+
+  Unfortunately this is not automated yet,
+  and due to XBMC's lack of a browser its not
+  so easy to overcome. Here is how to get a
+  token:
+
+  * Login to Mixcloud
+
+  * Open
+    https://www.mixcloud.com/oauth/authorize?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://www.mixcloud.com
+
+  * Accept. This will take you to
+    http://www.mixcloud.com/?code=OAUTH_CODE
+    Make sure to remember the OAUTH_CODE for later usage.
+
+  * Open
+    https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://www.mixcloud.com&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code=OAUTH_CODE
+    Make sure to replace OAUTH_CODE in this URL with the previously retrieved code.
+
+  * That's it. You should see a page now with your access token.
+    Open the plugin config, fill in the token and enjoy :)
+
+============================================
