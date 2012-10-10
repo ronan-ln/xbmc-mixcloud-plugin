@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.mixcloud"
-       name="MixCloud"
-       version="1.0"
+<addon id="plugin.audio.mixcloud-oauth"
+       name="MixCloud Git"
+       version="git"
        provider-name="jackyNIX/Bochi">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
