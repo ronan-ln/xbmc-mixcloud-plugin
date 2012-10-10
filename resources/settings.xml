@@ -5,6 +5,8 @@
   <category label="General">
     <setting id="page_limit" type="enum" label="Maximum cloudcasts on page" values="10|20|30|40|50" default="1" />
     <setting id="thumb_size" type="enum" label="Download thumbnail size" values="very small|small|medium|large|extra large" default="2" />
+    <setting id="access_token" type="text" label="Access Token" enable="true"/>
+    <setting id="download_path" type="folder" label="Download Path" default="" />
     <setting type="sep" />
   </category>
 
@@ -14,5 +16,5 @@
     <setting id="search_history_max" type="enum" label="Maximum searches" values="10|20|30|40|50" default="0" enable="false"/>
     <setting type="sep" />
   </category>
-
+  
 </settings>
