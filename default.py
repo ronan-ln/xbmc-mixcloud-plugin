@@ -565,9 +565,9 @@ def add_to_settinglist(name,value,maxname):
     
     
 def download(key,filename):
-    if not __settings__.getSetting("download_path"):
-        __settings__.openSettings()
-    download_path = __settings__.getSetting("download_path")
+    if not __addon__.getSetting("download_path"):
+        __addon__.openSettings()
+    download_path = __addon__.getSetting("download_path")
     if not download_path:
         return
     params["download_path"] = download_path
