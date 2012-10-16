@@ -46,6 +46,7 @@ URL_SEARCH=         'http://api.mixcloud.com/search/'
 URL_FAVS=           'https://api.mixcloud.com/me/favorites/'
 URL_FOLLOWING=      'https://api.mixcloud.com/me/following/'
 URL_FOLLOW=         'https://api.mixcloud.com/{0}/follow/'
+URL_FAVORITE=       'https://api.mixcloud.com/{0}/favorite/'
 URL_OFFLIBERTY_OFF= 'http://offliberty.com/off.php'
 URL_OFFLIBERTY=     'http://offliberty.com/'
 
@@ -147,9 +148,9 @@ def add_audio_item(infolabels,parameters={},img='',total=0):
     commands=[]
     commands.append((STRLOC_CONTEXTMENU_DOWNLOAD,"XBMC.RunPlugin(%s?mode=70&key=%s&filename=%s)"%(sys.argv[0],parameters.get(STR_KEY,""),filename)))
     if not mode==MODE_FAV:
-        commands.append((STRLOC_CONTEXTMENU_FAVADD,"XBMC.RunPlugin(%s?mode=80&key=%s)"%(sys.argv[0],parameters.get(STR_KEY,""))))
+        commands.append((STRLOC_CONTEXTMENU_FAVADD,"XBMC.RunPlugin(%s?mode=51&key=%s)"%(sys.argv[0],parameters.get(STR_KEY,""))))
     elif mode==MODE_FAV:
-        commands.append((STRLOC_CONTEXTMENU_FAVDEL,"XBMC.RunPlugin(%s?mode=80&key=%s)"%(sys.argv[0],parameters.get(STR_KEY,""))))
+        commands.append((STRLOC_CONTEXTMENU_FAVDEL,"XBMC.RunPlugin(%s?mode=52&key=%s)"%(sys.argv[0],parameters.get(STR_KEY,""))))
     if not mode==MODE_FOLLOWING:
         commands.append((STRLOC_CONTEXTMENU_FOLLOWART,"XBMC.RunPlugin(%s?mode=61&key=%s)"%(sys.argv[0],parameters.get(STR_KEY,"").split("/")[1])))
     listitem.addContextMenuItems(commands)       
@@ -509,6 +510,31 @@ def unfollow(key):
     data = response.read()
     print('MIXCLOUD'+data)
     return ''
+
+
+
+def favorite(key):
+    url=URL_FAVORITE.replace('{0}',key)+"?"+urllib.urlencode({STR_TOKEN:token})
+    print url
+    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    request = urllib2.Request(url, data='none')
+    request.get_method = lambda: 'POST'
+    response = urllib2.urlopen(request)
+    data = response.read()
+    print('MIXCLOUD'+data)
+    return ''
+
+
+
+def unfavorite(key):
+    url=URL_FAVORITE.replace('{0}',key)+"?"+urllib.urlencode({STR_TOKEN:token})
+    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    request = urllib2.Request(url, data='none')
+    request.get_method = lambda: 'DELETE'
+    response = urllib2.urlopen(request)
+    data = response.read()
+    print('MIXCLOUD'+data)
+    return ''
     
 
 
@@ -589,6 +615,10 @@ elif mode==MODE_FOLLOW:
     ok=follow(key)
 elif mode==MODE_UNFOLLOW:
     ok=unfollow(key)
+elif mode==MODE_ADD_FAV:
+    ok=favorite(key)
+elif mode==MODE_REM_FAV:
+    ok=unfavorite(key)
 elif mode==MODE_PLAY:
     ok=play_cloudcast(key)
 elif mode==MODE_DOWNLOAD:
