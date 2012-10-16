@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 '''
-@author: jackyNIX
+@author: jackyNIX/Bochi
 
-Copyright (C) 2011 jackyNIX
+Copyright (C) 2011-2012 jackyNIX/Bochi
 
 This file is part of XBMC MixCloud Plugin.
 
