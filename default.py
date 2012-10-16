@@ -51,7 +51,8 @@ URL_OFFLIBERTY_OFF= 'http://offliberty.com/off.php'
 URL_OFFLIBERTY=     'http://offliberty.com/'
 URL_PLAYLISTS=      'https://api.mixcloud.com/me/playlists/'
 URL_PLCONTENT=      ''
-
+URL_USER=           'https://api.mixcloud.com/me/'
+URL_LISTENS=        'https://api.mixcloud.com/me/listens/'
 
 MODE_HOME=        0
 MODE_HOT=        10
@@ -71,6 +72,7 @@ MODE_UNFOLLOW=   62
 MODE_DOWNLOAD=   70
 MODE_PLAYLISTS=  80
 MODE_PLCONTENT=  81
+MODE_LISTENS=    90
 
 
 STR_ARTIST=      u'artist'
@@ -106,6 +108,7 @@ STR_YEAR=        u'year'
 STR_TOKEN=       u'access_token'
 STR_FOLLOWING=   u'following'
 STR_FILENAME=    u'filename'
+STR_ERROR=       u'error'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
@@ -144,6 +147,36 @@ STRLOC_CONTEXTMENU_FOLLOW=    __addon__.getLocalizedString(30124)
 STRLOC_CONTEXTMENU_UNFOLLOW=  __addon__.getLocalizedString(30125)
 
 
+def test_authentication():
+    if not token:
+        if debugenabled:
+            print('MIXCLOUD - No auth_token found')
+        return 1
+    else:
+        try:
+            url=URL_USER+'?'+urllib.urlencode({STR_TOKEN:token})
+            h=urllib2.urlopen(url)
+        except urllib2.HTTPError, e:
+            if debugenabled:
+                print('MIXCLOUD - HTTPError while testing authentication: %r ' % e )
+            return 2
+        except urllib2.URLError, e:
+            if debugenabled:
+                print('MIXCLOUD - URLError while testing authentication: %r ' % e )
+            return 2
+        content=h.read()
+        json_content=json.loads(content)
+        if STR_ERROR in json_content:
+            if debugenabled:
+                print('MIXCLOUD - Received error string ' + content)
+            return 2
+        else:
+            if debugenabled:
+                print('MIXCLOUD - Authentication succeeded')
+            return 0
+    
+    
+    
 def add_audio_item(infolabels,parameters={},img='',total=0):
     listitem=xbmcgui.ListItem(infolabels[STR_TITLE],infolabels[STR_ARTIST],iconImage=img,thumbnailImage=img)
     listitem.setInfo('Music',infolabels)
@@ -180,19 +213,25 @@ def add_folder_item(name,infolabels={},parameters={},img=''):
 
 
 def show_home_menu():
-    add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_NEW,parameters={STR_MODE:MODE_NEW,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_POPULAR,parameters={STR_MODE:MODE_POPULAR,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH})
-    if not token:
-        add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
-    else:
-        add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
-        add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV})
-        add_folder_item(name=STRLOC_MAINMENU_FOLLOWING,parameters={STR_MODE:MODE_FOLLOWING})
-        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS})
-    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+    auth=test_authentication()
+    if auth==2:
+        dialog = xbmcgui.Dialog()
+        dialog.ok("Authentication failed", "Please double-check your access token.")
+        __addon__.openSettings()
+    elif auth < 2:
+        add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0})
+        add_folder_item(name=STRLOC_MAINMENU_NEW,parameters={STR_MODE:MODE_NEW,STR_OFFSET:0})
+        add_folder_item(name=STRLOC_MAINMENU_POPULAR,parameters={STR_MODE:MODE_POPULAR,STR_OFFSET:0})
+        add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
+        add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH})
+        if auth==1:
+            add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
+        elif auth==0:
+            add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_LISTENS})
+            add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV})
+            add_folder_item(name=STRLOC_MAINMENU_FOLLOWING,parameters={STR_MODE:MODE_FOLLOWING})
+            add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS})
+        xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
 def show_hot_menu(offset):
@@ -319,7 +358,15 @@ def show_following_menu(offset):
 def show_playlists_menu(offset):
     found=get_playlists(URL_PLAYLISTS,{STR_TOKEN:token,STR_LIMIT:limit,STR_OFFSET:offset})
     if found==limit:
-        add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV,STR_OFFSET:offset+limit})
+        add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FAV,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+    
+    
+    
+def show_listens_menu(offset):
+    found=get_cloudcasts(URL_LISTENS,{STR_TOKEN:token,STR_LIMIT:limit,STR_OFFSET:offset})
+    if found==limit:
+        add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_LISTENS,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)   
 
 
@@ -664,3 +711,5 @@ elif mode==MODE_DOWNLOAD:
     ok=download(key,filename)
 elif mode==MODE_PLAYLISTS:
     ok=show_playlists_menu(offset)
+elif mode==MODE_LISTENS:
+    ok=show_listens_menu(offset)
