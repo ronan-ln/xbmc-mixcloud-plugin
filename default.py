@@ -49,6 +49,8 @@ URL_FOLLOW=         'https://api.mixcloud.com/{0}/follow/'
 URL_FAVORITE=       'https://api.mixcloud.com/{0}/favorite/'
 URL_OFFLIBERTY_OFF= 'http://offliberty.com/off.php'
 URL_OFFLIBERTY=     'http://offliberty.com/'
+URL_PLAYLISTS=      'https://api.mixcloud.com/me/playlists/'
+URL_PLCONTENT=      ''
 
 
 MODE_HOME=        0
@@ -67,6 +69,8 @@ MODE_FOLLOWING=  60
 MODE_FOLLOW=     61
 MODE_UNFOLLOW=   62
 MODE_DOWNLOAD=   70
+MODE_PLAYLISTS=  80
+MODE_PLCONTENT=  81
 
 
 STR_ARTIST=      u'artist'
@@ -128,6 +132,7 @@ STRLOC_MAINMENU_SEARCH=       __addon__.getLocalizedString(30104)
 STRLOC_MAINMENU_HISTORY=      __addon__.getLocalizedString(30105)
 STRLOC_MAINMENU_FAVS=         __addon__.getLocalizedString(30106)
 STRLOC_MAINMENU_FOLLOWING=    __addon__.getLocalizedString(30107)
+STRLOC_MAINMENU_PLAYLISTS=    __addon__.getLocalizedString(30108)
 STRLOC_SEARCHMENU_CLOUDCASTS= __addon__.getLocalizedString(30110)
 STRLOC_SEARCHMENU_USERS=      __addon__.getLocalizedString(30111)
 STRLOC_SEARCHMENU_HISTORY=    __addon__.getLocalizedString(30112)
@@ -180,9 +185,13 @@ def show_home_menu():
     add_folder_item(name=STRLOC_MAINMENU_POPULAR,parameters={STR_MODE:MODE_POPULAR,STR_OFFSET:0})
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH})
-    add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
-    add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV})
-    add_folder_item(name=STRLOC_MAINMENU_FOLLOWING,parameters={STR_MODE:MODE_FOLLOWING})
+    if not token:
+        add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
+    else:
+        add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
+        add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV})
+        add_folder_item(name=STRLOC_MAINMENU_FOLLOWING,parameters={STR_MODE:MODE_FOLLOWING})
+        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -304,6 +313,14 @@ def show_following_menu(offset):
         if found==limit:
             add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FOLLOWING,STR_KEY:key,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+    
+    
+    
+def show_playlists_menu(offset):
+    found=get_playlists(URL_PLAYLISTS,{STR_TOKEN:token,STR_LIMIT:limit,STR_OFFSET:offset})
+    if found==limit:
+        add_folder_item(name=STRLOC_MAINMENU_FAVS,parameters={STR_MODE:MODE_FAV,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)   
 
 
 
@@ -488,6 +505,28 @@ def get_query(query=''):
 
 
 
+def get_playlists(url,parameters):
+    found=0
+    if len(parameters)>0:
+        url=url+'?'+urllib.urlencode(parameters)
+    h=urllib2.urlopen(url)
+    content=h.read()
+    json_content=json.loads(content)
+    if STR_DATA in json_content and json_content[STR_DATA]:
+        json_data=json_content[STR_DATA]
+        for json_user in json_data:
+            if STR_NAME in json_user and json_user[STR_NAME]:
+                json_name=json_user[STR_NAME]
+                json_key=''
+                json_thumbnail=''
+                if STR_KEY in json_user and json_user[STR_KEY]:
+                    json_key=json_user[STR_KEY]
+                add_folder_item(name=json_name,parameters={STR_MODE:MODE_PLCONTENT,STR_KEY:json_key})
+                found=found+1
+    return found
+
+
+
 def follow(key):
     url=URL_FOLLOW.replace('{0}',key)+"?"+urllib.urlencode({STR_TOKEN:token})
     print url
@@ -623,3 +662,5 @@ elif mode==MODE_PLAY:
     ok=play_cloudcast(key)
 elif mode==MODE_DOWNLOAD:
     ok=download(key,filename)
+elif mode==MODE_PLAYLISTS:
+    ok=show_playlists_menu(offset)
