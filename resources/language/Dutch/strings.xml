@@ -10,15 +10,27 @@
 	<string id="30103">Categorieën</string>
 	<string id="30104">Zoeken</string>
 	<string id="30105">Geschiedenis</string>
+	<string id="30106">Favorieten</string>
+	<string id="30107">Volgen</string>
+	<string id="30108">Afspeellijsten</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Gebruikers...</string>
 	<string id="30112">Geschiedenis...</string>
+	<!-- context menu -->
+	<string id="30120">Downloaden</string>
+	<string id="30121">Toevoegen aan favorieten</string>
+	<string id="30122">Verwijderen van favorieten</string>
+	<string id="30123">Artiest volgen</string>
+	<string id="30124">Volgen</string>
+	<string id="30125">Niet meer volgen</string>
 	<!-- general settings -->
 	<string id="30200">Algemeen</string>
 	<string id="30201">Maximum cloudcasts per pagina</string>
 	<string id="30202">Grootte van afbeeldingen</string>
 	<string id="30203">Debug modus</string>
+	<string id="30204">Access token</string>
+	<string id="30205">Download pad</string>
 	<!-- history settings -->
 	<string id="30220">Geschiedenis</string>
 	<string id="30221">Maximum afgespeelde cloudcasts</string>
