@@ -19,8 +19,8 @@
 	<string id="30112">Geschiedenis...</string>
 	<!-- context menu -->
 	<string id="30120">Downloaden</string>
-	<string id="30121">Toevoegen aan favorieten</string>
-	<string id="30122">Verwijderen van favorieten</string>
+	<string id="30121">Toevoegen aan Mixcloud favorieten</string>
+	<string id="30122">Verwijderen van Mixcloud favorieten</string>
 	<string id="30123">Artiest volgen</string>
 	<string id="30124">Volgen</string>
 	<string id="30125">Niet meer volgen</string>
