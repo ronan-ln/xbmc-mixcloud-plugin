@@ -10,15 +10,27 @@
 	<string id="30103">Catégories</string>
 	<string id="30104">Recherche</string>
 	<string id="30105">Histoire</string>
+	<string id="30106">favoris</string>
+	<string id="30107">Suivre</string>
+	<string id="30108">Playlists</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Utilisateurs...</string>
 	<string id="30112">Histoire...</string>
+	<!-- context menu -->
+	<string id="30120">Télécharger</string>
+	<string id="30121">Ajouter aux Mixcloud favoris</string>
+	<string id="30122">Supprimer de Mixlcoud favoris</string>
+	<string id="30123">Suivre artiste</string>
+	<string id="30124">Suivre</string>
+	<string id="30125">Arrêter de suivre</string>
 	<!-- general settings -->
 	<string id="30200">Général</string>
 	<string id="30201">Nombre maximal de cloudcasts par page</string>
 	<string id="30202">Dimensions des icônes téléchargés</string>
 	<string id="30203">Mode debug</string>
+	<string id="30204">Access token</string>
+	<string id="30205">Emplacement de téléchargements</string>
 	<!-- history settings -->
 	<string id="30220">Histoire</string>
 	<string id="30221">Nombre maximal de cloudcasts écoutés</string>
