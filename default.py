@@ -46,11 +46,13 @@ URL_FAVORITES=   'https://api.mixcloud.com/me/favorites/'
 URL_FOLLOWINGS=  'https://api.mixcloud.com/me/following/'
 URL_FOLLOWERS=   'https://api.mixcloud.com/me/followers/'
 URL_LISTENS=     'https://api.mixcloud.com/me/listens/'
+URL_UPLOADS=     'https://api.mixcloud.com/me/cloudcasts/'
+URL_PLAYLISTS=   'https://api.mixcloud.com/me/playlists/'
 URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
 URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
 URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
-URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://www.mixcloud.com&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
+URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://forum.kodi.tv/showthread.php?tid=116386&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
 
 
 
@@ -63,6 +65,8 @@ MODE_HISTORY=     14
 MODE_JACKYNIX=    15
 MODE_FOLLOWERS=   16
 MODE_LISTENS=     17
+MODE_UPLOADS=     18
+MODE_PLAYLISTS=   19
 MODE_CATEGORIES=  20
 MODE_USERS=       21
 MODE_SEARCH=      30
@@ -86,6 +90,7 @@ STR_COMMENT=     u'comment'
 STR_CREATEDTIME= u'created_time'
 STR_DATA=        u'data'
 STR_DATE=        u'date'
+STR_DESCRIPTION= u'description'
 STR_DURATION=    u'duration'
 STR_GENRE=       u'genre'
 STR_HISTORY=     u'history'
@@ -139,6 +144,7 @@ resolverid=  int(__addon__.getSetting('resolver'))
 oath_code=   __addon__.getSetting('oath_code')
 access_token=__addon__.getSetting('access_token')
 useaccount=  (__addon__.getSetting('use_account')=='true')
+ext_info=    (__addon__.getSetting('ext_info')=='true')
 
 
 
@@ -159,6 +165,8 @@ STRLOC_MAINMENU_LISTENS=        __addon__.getLocalizedString(30109)
 STRLOC_SEARCHMENU_CLOUDCASTS=   __addon__.getLocalizedString(30110)
 STRLOC_SEARCHMENU_USERS=        __addon__.getLocalizedString(30111)
 STRLOC_SEARCHMENU_HISTORY=      __addon__.getLocalizedString(30112)
+STRLOC_MAINMENU_UPLOADS=        __addon__.getLocalizedString(30113)
+STRLOC_MAINMENU_PLAYLISTS=      __addon__.getLocalizedString(30114)
 STRLOC_CONTEXTMENU_ADDFAVORITE= __addon__.getLocalizedString(30120)
 STRLOC_CONTEXTMENU_DELFAVORITE= __addon__.getLocalizedString(30121)
 STRLOC_CONTEXTMENU_ADDFOLLOWING=__addon__.getLocalizedString(30122)
@@ -205,6 +213,8 @@ def show_home_menu():
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
         add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
         add_folder_item(name=STRLOC_MAINMENU_LISTENS,parameters={STR_MODE:MODE_LISTENS},img=get_icon('yourlistens.png'))
+        add_folder_item(name=STRLOC_MAINMENU_UPLOADS,parameters={STR_MODE:MODE_UPLOADS},img=get_icon('youruploads.png'))
+        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS},img=get_icon('yourplaylists.png'))
     add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0},img=get_icon('hot.png'))
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
@@ -270,6 +280,29 @@ def show_listens_menu(offset):
         found=get_cloudcasts(URL_LISTENS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
         if found==limit:
             add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_LISTENS,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_uploads_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_UPLOADS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_UPLOADS,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_playlists_menu(key,offset):
+    if key=="":
+        if check_profile_state():
+            found=get_playlists(URL_PLAYLISTS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+            if found==limit:
+                add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_PLAYLISTS,STR_OFFSET:offset+limit})
+    else:
+        found=get_cloudcasts(URL_API+key[1:len(key)-1]+'/cloudcasts/',{STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_PLAYLISTS,STR_KEY:key,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -345,6 +378,8 @@ def check_profile_state():
                 __addon__.setSetting('access_token','')
                 if oath_code<>'':
                     try:
+                        if debugenabled:
+                            print('MIXCLOUD getting access token ' + URL_TOKEN+oath_code)
                         h=urllib2.urlopen(URL_TOKEN+oath_code)
                         content=h.read()
                         json_content=json.loads(content)
@@ -358,7 +393,7 @@ def check_profile_state():
                                 print('MIXCLOUD No access_token received')
                                 print json_content
                     except:
-                        print('MIXCLOUD oath_code failed')
+                        print('MIXCLOUD oath_code failed error=%s' % (sys.exc_info()[1]))
 
                 ask=(access_token=='')
 
@@ -390,10 +425,10 @@ def show_history_search_menu(offset):
 def play_cloudcast(key):
     url=get_stream(key)
     if url:
-        infolabels=get_cloudcast(URL_API[:-1]+key,{},True)
-        listitem=xbmcgui.ListItem(label=infolabels[STR_TITLE],label2=infolabels[STR_ARTIST],iconImage=infolabels[STR_THUMBNAIL],thumbnailImage=infolabels[STR_THUMBNAIL],path=url)
-        listitem.setInfo(type='Music',infoLabels=infolabels)
-        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=listitem)
+        _infolabels=get_cloudcast(URL_API[:-1]+key,{},True)
+        _listitem=xbmcgui.ListItem(label=_infolabels[STR_TITLE],label2=_infolabels[STR_ARTIST],path=url)
+        _listitem.setInfo(type='Music',infoLabels=_infolabels)
+        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=_listitem)
         add_to_settinglist('play_history_list',key,'play_history_max')
         if debugenabled:
             print('MIXCLOUD playing '+url)
@@ -423,7 +458,10 @@ def get_cloudcasts(url,parameters):
             json_tracknumber=0
         for json_cloudcast in json_data:
             json_tracknumber=json_tracknumber+1
-            infolabels = add_cloudcast(json_tracknumber,json_cloudcast,total);
+            if ext_info:
+                infolabels = get_cloudcast(URL_API[:-1]+json_cloudcast[STR_KEY],{},json_tracknumber,total)
+            else:
+                infolabels = add_cloudcast(json_tracknumber,json_cloudcast,total)
             if len(infolabels)>0:
                 found=found+1
     return found
@@ -473,11 +511,12 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
             json_pictures=json_cloudcast[STR_PICTURES]
             if thumb_size in json_pictures and json_pictures[thumb_size]:
                 json_image=json_pictures[thumb_size]
+        if STR_DESCRIPTION in json_cloudcast and json_cloudcast[STR_DESCRIPTION]:
+            json_comment=json_cloudcast[STR_DESCRIPTION].encode('ascii', 'ignore')
         if STR_TAGS in json_cloudcast and json_cloudcast[STR_TAGS]:
             json_tags=json_cloudcast[STR_TAGS]
             for json_tag in json_tags:
                 if STR_NAME in json_tag and json_tag[STR_NAME]:
-                    json_comment=json_tag[STR_NAME]+'\n'
                     if json_genre<>'':
                         json_genre=json_genre+', '
                     json_genre=json_genre+json_tag[STR_NAME]
@@ -587,6 +626,27 @@ def get_stream(cloudcast_key):
                 __addon__.setSetting('resolver',str(resolverid))
 
     return strm
+
+
+
+def get_playlists(url,parameters):
+    found=0
+    if len(parameters)>0:
+        url=url+'?'+urllib.urlencode(parameters)
+    h=urllib2.urlopen(url)
+    content=h.read()
+    json_content=json.loads(content)
+    if STR_DATA in json_content and json_content[STR_DATA]:
+        json_data=json_content[STR_DATA]
+        for json_category in json_data:
+            if STR_NAME in json_category and json_category[STR_NAME]:
+                json_name=json_category[STR_NAME]
+                json_key=''
+                if STR_KEY in json_category and json_category[STR_KEY]:
+                    json_key=json_category[STR_KEY]
+                add_folder_item(name=json_name,parameters={STR_MODE:MODE_PLAYLISTS,STR_KEY:json_key})
+                found=found+1
+    return found
 
 
 
@@ -706,7 +766,7 @@ def add_to_settinglist(name,value,maxname):
         settinglist.pop()
     __addon__.setSetting(name,', '.join(settinglist))
 
-
+    
 
 params=parameters_string_to_dict(urllib.unquote(sys.argv[2]))
 mode=int(params.get(STR_MODE,"0"))
@@ -734,6 +794,10 @@ elif mode==MODE_FOLLOWERS:
     ok=show_followers_menu(offset)
 elif mode==MODE_LISTENS:
     ok=show_listens_menu(offset)
+elif mode==MODE_UPLOADS:
+    ok=show_uploads_menu(offset)
+elif mode==MODE_PLAYLISTS:
+    ok=show_playlists_menu(key,offset)
 elif mode==MODE_HOT:
     ok=show_hot_menu(offset)
 elif mode==MODE_CATEGORIES:
@@ -752,9 +816,9 @@ elif mode==MODE_ADDFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'POST')
 elif mode==MODE_DELFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'DELETE')
-    xbmc.executebuiltin("Container.Refresh")
+    xbmc.executebuiltin("Container.Update")
 elif mode==MODE_ADDFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'POST')
 elif mode==MODE_DELFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'DELETE')
-    xbmc.executebuiltin("Container.Refresh")
+    xbmc.executebuiltin("Container.Update")
