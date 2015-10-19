@@ -52,7 +52,8 @@ URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
 URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
 URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
-URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://forum.kodi.tv/showthread.php?tid=116386&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
+#URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://forum.kodi.tv/showthread.php?tid=116386&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
+URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token'
 
 
 
@@ -120,6 +121,7 @@ STR_TRACKNUMBER= u'tracknumber'
 STR_TYPE=        u'type'
 STR_USER=        u'user'
 STR_YEAR=        u'year'
+STR_REDIRECTURI= u'http://forum.kodi.tv/showthread.php?tid=116386'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
@@ -225,6 +227,10 @@ def show_home_menu():
 
 
 def show_feed_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_FEED,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FEED,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -378,9 +384,21 @@ def check_profile_state():
                 __addon__.setSetting('access_token','')
                 if oath_code<>'':
                     try:
+                        values={
+                                'client_id' : STR_CLIENTID,
+                                'redirect_uri' : STR_REDIRECTURI,
+                                'client_secret' : STR_CLIENTSECRET,
+                                'code' : oath_code
+                               }
+                        headers={
+                                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                                 'Referer' : 'http://offliberty.com/'
+                                }
+                        postdata = urllib.urlencode(values)
                         if debugenabled:
-                            print('MIXCLOUD getting access token ' + URL_TOKEN+oath_code)
-                        h=urllib2.urlopen(URL_TOKEN+oath_code)
+                            print('MIXCLOUD getting access token ' + URL_TOKEN + '?' + postdata)
+                        request = urllib2.Request('https://www.mixcloud.com/oauth/access_token', postdata, headers, 'https://www.mixcloud.com/')
+                        h = urllib2.urlopen(request)
                         content=h.read()
                         json_content=json.loads(content)
                         if STR_ACCESS_TOKEN in json_content and json_content[STR_ACCESS_TOKEN] :
@@ -473,10 +491,14 @@ def get_cloudcast(url,parameters,index=1,total=0,forinfo=False):
         url=url+'?'+urllib.urlencode(parameters)
     if debugenabled:
         print('MIXCLOUD '+'get cloudcast '+url)
-    h=urllib2.urlopen(url)
-    content=h.read()
-    json_cloudcast=json.loads(content)
-    return add_cloudcast(index,json_cloudcast,total,forinfo)
+    try:
+        h=urllib2.urlopen(url)
+        content=h.read()
+        json_cloudcast=json.loads(content)
+        return add_cloudcast(index,json_cloudcast,total,forinfo)
+    except:
+        print('MIXCLOUD get cloudcast failed error=%s' % (sys.exc_info()[1]))
+    return {}
 
 
 
