@@ -3,22 +3,22 @@
 '''
 @author: jackyNIX
 
-Copyright (C) 2011-2015 jackyNIX
+Copyright (C) 2011-2020 jackyNIX
 
-This file is part of XBMC MixCloud Plugin.
+This file is part of KODI MixCloud Plugin.
 
-XBMC MixCloud Plugin is free software: you can redistribute it and/or modify
+KODI MixCloud Plugin is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-XBMC MixCloud Plugin is distributed in the hope that it will be useful,
+KODI MixCloud Plugin is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with XBMC MixCloud Plugin.  If not, see <http://www.gnu.org/licenses/>.
+along with KODI MixCloud Plugin.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 
@@ -35,102 +35,123 @@ from itertools import cycle, izip
 
 
 
-URL_PLUGIN=      'plugin://music/MixCloud/'
-URL_MIXCLOUD=    'http://www.mixcloud.com/'
-URL_API=         'http://api.mixcloud.com/'
-URL_CATEGORIES=  'http://api.mixcloud.com/categories/'
-URL_HOT=         'http://api.mixcloud.com/popular/hot/'
-URL_SEARCH=      'http://api.mixcloud.com/search/'
-URL_FEED=        'https://api.mixcloud.com/me/feed/'
-URL_FAVORITES=   'https://api.mixcloud.com/me/favorites/'
-URL_FOLLOWINGS=  'https://api.mixcloud.com/me/following/'
-URL_FOLLOWERS=   'https://api.mixcloud.com/me/followers/'
-URL_LISTENS=     'https://api.mixcloud.com/me/listens/'
-URL_UPLOADS=     'https://api.mixcloud.com/me/cloudcasts/'
-URL_LISTENLATER= 'https://api.mixcloud.com/me/listen-later/'
-URL_PLAYLISTS=   'https://api.mixcloud.com/me/playlists/'
-URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
-URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
-URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
-URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
-URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token'
+URL_PLUGIN=         'plugin://music/MixCloud/'
+URL_MIXCLOUD=       'https://www.mixcloud.com/'
+URL_API=            'http://api.mixcloud.com/'
+URL_CATEGORIES=     'http://api.mixcloud.com/categories/'
+URL_HOT=            'http://api.mixcloud.com/popular/hot/'
+URL_SEARCH=         'http://api.mixcloud.com/search/'
+URL_FEED=           'https://api.mixcloud.com/me/feed/'
+URL_FAVORITES=      'https://api.mixcloud.com/me/favorites/'
+URL_FOLLOWINGS=     'https://api.mixcloud.com/me/following/'
+URL_FOLLOWERS=      'https://api.mixcloud.com/me/followers/'
+URL_LISTENS=        'https://api.mixcloud.com/me/listens/'
+URL_UPLOADS=        'https://api.mixcloud.com/me/cloudcasts/'
+URL_LISTENLATER=    'https://api.mixcloud.com/me/listen-later/'
+URL_PLAYLISTS=      'https://api.mixcloud.com/me/playlists/'
+URL_JACKYNIX=       'http://api.mixcloud.com/jackyNIX/'
+URL_STREAM=         'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
+URL_FAVORITE=       'https://api.mixcloud.com{0}favorite/'
+URL_FOLLOW=         'https://api.mixcloud.com{0}/follow/'
+URL_ADDLISTENLATER= 'https://api.mixcloud.com{0}listen-later/'
+URL_TOKEN=          'https://www.mixcloud.com/oauth/access_token'
 
 
 
-MODE_HOME=         0
-MODE_FEED=        10
-MODE_FAVORITES=   11
-MODE_FOLLOWINGS=  12
-MODE_HOT=         13
-MODE_HISTORY=     14
-MODE_JACKYNIX=    15
-MODE_FOLLOWERS=   16
-MODE_LISTENS=     17
-MODE_UPLOADS=     18
-MODE_PLAYLISTS=   19
-MODE_CATEGORIES=  20
-MODE_USERS=       21
-MODE_LISTENLATER= 22
-MODE_SEARCH=      30
-MODE_PLAY=        40
-MODE_ADDFAVORITE= 50
-MODE_DELFAVORITE= 51
-MODE_ADDFOLLOWING=52
-MODE_DELFOLLOWING=53
+MODE_HOME=           0
+MODE_FEED=          10
+MODE_FAVORITES=     11
+MODE_FOLLOWINGS=    12
+MODE_HOT=           13
+MODE_HISTORY=       14
+MODE_JACKYNIX=      15
+MODE_FOLLOWERS=     16
+MODE_LISTENS=       17
+MODE_UPLOADS=       18
+MODE_PLAYLISTS=     19
+MODE_CATEGORIES=    20
+MODE_USERS=         21
+MODE_LISTENLATER=   22
+MODE_LOGIN=         23
+MODE_LOGOFF=        24
+MODE_SEARCH=        30
+MODE_PLAY=          40
+MODE_ADDFAVORITE=   50
+MODE_DELFAVORITE=   51
+MODE_ADDFOLLOWING=  52
+MODE_DELFOLLOWING=  53
+MODE_ADDLISTENLATER=54
+MODE_DELLISTENLATER=55
 
 
 
-STR_ACCESS_TOKEN=u'access_token'
-STR_ARTIST=      u'artist'
-STR_AUDIOFORMATS=u'audio_formats'
-STR_AUDIOLENGTH= u'audio_length'
-STR_CLIENTID=    u'Vef7HWkSjCzEFvdhet'
-STR_CLIENTSECRET=u'VK7hwemnZWBexDbnVZqXLapVbPK3FFYT'
-STR_CLOUDCAST=   u'cloudcast'
-STR_COUNT=       u'count'
-STR_COMMENT=     u'comment'
-STR_CREATEDTIME= u'created_time'
-STR_DATA=        u'data'
-STR_DATE=        u'date'
-STR_DESCRIPTION= u'description'
-STR_DURATION=    u'duration'
-STR_GENRE=       u'genre'
-STR_HISTORY=     u'history'
-STR_ID=          u'id'
-STR_IMAGE=       u'image'
-STR_FORMAT=      u'format'
-STR_KEY=         u'key'
-STR_LIMIT=       u'limit'
-STR_MESSAGE=     u'message'
-STR_MODE=        u'mode'
-STR_MP3=         u'mp3'
-STR_NAME=        u'name'
-STR_OFFSET=      u'offset'
-STR_PAGELIMIT=   u'page_limit'
-STR_PICTURES=    u'pictures'
-STR_Q=           u'q'
-STR_QUERY=       u'query'
-STR_RESULT=      u'result'
-STR_STREAMURL=   u'stream_url'
-STR_SUCCESS=     u'success'
-STR_TAG=         u'tag'
-STR_TAGS=        u'tags'
-STR_THUMBNAIL=   u'thumbnail'
-STR_TITLE=       u'title'
-STR_TRACK=       u'track'
-STR_TRACKNUMBER= u'tracknumber'
-STR_TYPE=        u'type'
-STR_USER=        u'user'
-STR_YEAR=        u'year'
-STR_REDIRECTURI= u'http://forum.kodi.tv/showthread.php?tid=116386'
+STR_ACCESS_TOKEN=   u'access_token'
+STR_ARTIST=         u'artist'
+STR_AUDIOFORMATS=   u'audio_formats'
+STR_AUDIOLENGTH=    u'audio_length'
+STR_CLIENTID=       u'Vef7HWkSjCzEFvdhet'
+STR_CLIENTSECRET=   u'VK7hwemnZWBexDbnVZqXLapVbPK3FFYT'
+STR_CLOUDCAST=      u'cloudcast'
+STR_CLOUDCASTLOOKUP=u'cloudcastLookup'
+STR_COUNT=          u'count'
+STR_COMMENT=        u'comment'
+STR_CREATEDTIME=    u'created_time'
+STR_DASHURL=        u'dashUrl'
+STR_DATA=           u'data'
+STR_DATE=           u'date'
+STR_DESCRIPTION=    u'description'
+STR_DURATION=       u'duration'
+STR_GENRE=          u'genre'
+STR_HISTORY=        u'history'
+STR_HLSURL=         u'hlsUrl'
+STR_ID=             u'id'
+STR_IMAGE=          u'image'
+STR_ISEXCLUSIVE=    u'isExclusive'
+STR_FORMAT=         u'format'
+STR_KEY=            u'key'
+STR_LIMIT=          u'limit'
+STR_MAGICSTRING=    u'IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD'
+STR_MESSAGE=        u'message'
+STR_MODE=           u'mode'
+STR_MP3=            u'mp3'
+STR_NAME=           u'name'
+STR_OFFSET=         u'offset'
+STR_PAGELIMIT=      u'page_limit'
+STR_PICTURES=       u'pictures'
+STR_Q=              u'q'
+STR_QUERY=          u'query'
+STR_RESULT=         u'result'
+STR_STREAMURL=      u'stream_url'
+STR_STREAMINFO=     u'streamInfo'
+STR_SUCCESS=        u'success'
+STR_TAG=            u'tag'
+STR_TAGS=           u'tags'
+STR_THUMBNAIL=      u'thumbnail'
+STR_TITLE=          u'title'
+STR_TRACK=          u'track'
+STR_TRACKNUMBER=    u'tracknumber'
+STR_TYPE=           u'type'
+STR_URL=            u'url'
+STR_USER=           u'user'
+STR_YEAR=           u'year'
+STR_REDIRECTURI=    u'http://forum.kodi.tv/showthread.php?tid=116386'
 
-STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
+STR_THUMB_SIZES=    {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
 
 
 class Resolver:
-    local=0
-    offliberty=1
+    auto=0
+    local=1
+    offliberty=2
+    m4a=3
+    mixclouddownloader1=4
+    mixclouddownloader2=5
+
+resolver_order=[Resolver.local,
+                Resolver.mixclouddownloader1,
+                Resolver.offliberty,
+                Resolver.mixclouddownloader2]
 
 
 
@@ -140,41 +161,47 @@ __addon__ =xbmcaddon.Addon('plugin.audio.mixcloud')
 __ICON__ = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'icon.png')
 
 
-debugenabled=(__addon__.getSetting('debug')=='true')
-limit=       (1+int(__addon__.getSetting('page_limit')))*10
-thumb_size=  STR_THUMB_SIZES[int(__addon__.getSetting('thumb_size'))]
-resolverid=  int(__addon__.getSetting('resolver'))
-oath_code=   __addon__.getSetting('oath_code')
-access_token=__addon__.getSetting('access_token')
-useaccount=  (__addon__.getSetting('use_account')=='true')
-ext_info=    (__addon__.getSetting('ext_info')=='true')
+debugenabled=     (__addon__.getSetting('debug')=='true')
+limit=            (1+int(__addon__.getSetting('page_limit')))*10
+thumb_size=       STR_THUMB_SIZES[int(__addon__.getSetting('thumb_size'))]
+resolverid_orig=  int(__addon__.getSetting('resolver'))
+resolverid_curr=  int(__addon__.getSetting('resolver'))
+oath_code=        __addon__.getSetting('oath_code')
+access_token=     __addon__.getSetting('access_token')
+ext_info=        (__addon__.getSetting('ext_info')=='true')
 
 
 
-STRLOC_COMMON_MORE=             __addon__.getLocalizedString(30001)
-STRLOC_COMMON_RESOLVER_ERROR=   __addon__.getLocalizedString(30002)
-STRLOC_COMMON_TOKEN_ERROR=      __addon__.getLocalizedString(30003)
-STRLOC_COMMON_AUTH_CODE=        __addon__.getLocalizedString(30004)
-STRLOC_MAINMENU_HOT=            __addon__.getLocalizedString(30100)
-STRLOC_MAINMENU_FAVORITES=      __addon__.getLocalizedString(30101)
-STRLOC_MAINMENU_FOLLOWINGS=     __addon__.getLocalizedString(30102)
-STRLOC_MAINMENU_CATEGORIES=     __addon__.getLocalizedString(30103)
-STRLOC_MAINMENU_SEARCH=         __addon__.getLocalizedString(30104)
-STRLOC_MAINMENU_HISTORY=        __addon__.getLocalizedString(30105)
-STRLOC_MAINMENU_JACKYNIX=       __addon__.getLocalizedString(30106)
-STRLOC_MAINMENU_FEED=           __addon__.getLocalizedString(30107)
-STRLOC_MAINMENU_FOLLOWERS=      __addon__.getLocalizedString(30108)
-STRLOC_MAINMENU_LISTENS=        __addon__.getLocalizedString(30109)
-STRLOC_SEARCHMENU_CLOUDCASTS=   __addon__.getLocalizedString(30110)
-STRLOC_SEARCHMENU_USERS=        __addon__.getLocalizedString(30111)
-STRLOC_SEARCHMENU_HISTORY=      __addon__.getLocalizedString(30112)
-STRLOC_MAINMENU_UPLOADS=        __addon__.getLocalizedString(30113)
-STRLOC_MAINMENU_PLAYLISTS=      __addon__.getLocalizedString(30114)
-STRLOC_MAINMENU_LISTENLATER=    __addon__.getLocalizedString(30115)
-STRLOC_CONTEXTMENU_ADDFAVORITE= __addon__.getLocalizedString(30120)
-STRLOC_CONTEXTMENU_DELFAVORITE= __addon__.getLocalizedString(30121)
-STRLOC_CONTEXTMENU_ADDFOLLOWING=__addon__.getLocalizedString(30122)
-STRLOC_CONTEXTMENU_DELFOLLOWING=__addon__.getLocalizedString(30123)
+STRLOC_COMMON_MORE=               __addon__.getLocalizedString(30001)
+STRLOC_COMMON_RESOLVER_ERROR=     __addon__.getLocalizedString(30002)
+STRLOC_COMMON_TOKEN_ERROR=        __addon__.getLocalizedString(30003)
+STRLOC_COMMON_AUTH_CODE=          __addon__.getLocalizedString(30004)
+STRLOC_MAINMENU_HOT=              __addon__.getLocalizedString(30100)
+STRLOC_MAINMENU_FAVORITES=        __addon__.getLocalizedString(30101)
+STRLOC_MAINMENU_FOLLOWINGS=       __addon__.getLocalizedString(30102)
+STRLOC_MAINMENU_CATEGORIES=       __addon__.getLocalizedString(30103)
+STRLOC_MAINMENU_SEARCH=           __addon__.getLocalizedString(30104)
+STRLOC_MAINMENU_HISTORY=          __addon__.getLocalizedString(30105)
+STRLOC_MAINMENU_JACKYNIX=         __addon__.getLocalizedString(30106)
+STRLOC_MAINMENU_FEED=             __addon__.getLocalizedString(30107)
+STRLOC_MAINMENU_FOLLOWERS=        __addon__.getLocalizedString(30108)
+STRLOC_MAINMENU_LISTENS=          __addon__.getLocalizedString(30109)
+STRLOC_MAINMENU_UPLOADS=          __addon__.getLocalizedString(30113)
+STRLOC_MAINMENU_PLAYLISTS=        __addon__.getLocalizedString(30114)
+STRLOC_MAINMENU_LISTENLATER=      __addon__.getLocalizedString(30115)
+STRLOC_MAINMENU_LOGIN=            __addon__.getLocalizedString(30116)
+STRLOC_MAINMENU_LOGOFF=           __addon__.getLocalizedString(30117)
+
+STRLOC_SEARCHMENU_CLOUDCASTS=     __addon__.getLocalizedString(30200)
+STRLOC_SEARCHMENU_USERS=          __addon__.getLocalizedString(30201)
+STRLOC_SEARCHMENU_HISTORY=        __addon__.getLocalizedString(30202)
+
+STRLOC_CONTEXTMENU_ADDFAVORITE=   __addon__.getLocalizedString(30300)
+STRLOC_CONTEXTMENU_DELFAVORITE=   __addon__.getLocalizedString(30301)
+STRLOC_CONTEXTMENU_ADDFOLLOWING=  __addon__.getLocalizedString(30302)
+STRLOC_CONTEXTMENU_DELFOLLOWING=  __addon__.getLocalizedString(30303)
+STRLOC_CONTEXTMENU_ADDLISTENLATER=__addon__.getLocalizedString(30304)
+STRLOC_CONTEXTMENU_DELLISTENLATER=__addon__.getLocalizedString(30305)
 
 
 
@@ -183,13 +210,18 @@ def add_audio_item(infolabels,parameters={},img='',total=0):
     listitem.setInfo('Music',infolabels)
     listitem.setProperty('IsPlayable','true')
     url=sys.argv[0]+'?'+urllib.urlencode(parameters)
-    commands=[]
-    if mode==MODE_FAVORITES:
-        commands.append((STRLOC_CONTEXTMENU_DELFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFAVORITE,parameters.get(STR_KEY,""))))
-    else:
-        commands.append((STRLOC_CONTEXTMENU_ADDFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFAVORITE,parameters.get(STR_KEY,""))))
-    commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_USER,""))))
-    listitem.addContextMenuItems(commands)       
+    if access_token!='':
+        commands=[]
+        if mode==MODE_FAVORITES:
+            commands.append((STRLOC_CONTEXTMENU_DELFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFAVORITE,parameters.get(STR_KEY,""))))
+        else:
+            commands.append((STRLOC_CONTEXTMENU_ADDFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFAVORITE,parameters.get(STR_KEY,""))))
+        if mode==MODE_LISTENLATER:
+            commands.append((STRLOC_CONTEXTMENU_DELLISTENLATER,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELLISTENLATER,parameters.get(STR_KEY,""))))
+        else:
+            commands.append((STRLOC_CONTEXTMENU_ADDLISTENLATER,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDLISTENLATER,parameters.get(STR_KEY,""))))
+        commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_USER,""))))
+        listitem.addContextMenuItems(commands)       
     xbmcplugin.addDirectoryItem(plugin_handle,url,listitem,isFolder=False,totalItems=total)
 
 
@@ -200,19 +232,19 @@ def add_folder_item(name,infolabels={},parameters={},img=''):
     listitem=xbmcgui.ListItem(name,name,iconImage=img,thumbnailImage=img)
     listitem.setInfo('Music',infolabels)
     url=sys.argv[0]+'?'+urllib.urlencode(parameters)
-    commands=[]
-    if mode==MODE_FOLLOWINGS:
-        commands.append((STRLOC_CONTEXTMENU_DELFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFOLLOWING,parameters.get(STR_KEY,""))))
-    elif (mode==MODE_FOLLOWERS) or (mode==MODE_USERS):
-        commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_KEY,""))))
-    listitem.addContextMenuItems(commands)       
+    if access_token!='':
+        commands=[]
+        if mode==MODE_FOLLOWINGS:
+            commands.append((STRLOC_CONTEXTMENU_DELFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFOLLOWING,parameters.get(STR_KEY,""))))
+        elif (mode==MODE_FOLLOWERS) or (mode==MODE_USERS):
+            commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_KEY,""))))
+        listitem.addContextMenuItems(commands)       
     return xbmcplugin.addDirectoryItem(plugin_handle,url,listitem,isFolder=True)
 
 
 
 def show_home_menu():
-    if useaccount:
-#        add_folder_item(name=STRLOC_MAINMENU_FEED,parameters={STR_MODE:MODE_FEED})
+    if access_token!='':
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWINGS,parameters={STR_MODE:MODE_FOLLOWINGS},img=get_icon('yourfollowings.png'))
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
         add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
@@ -220,11 +252,12 @@ def show_home_menu():
         add_folder_item(name=STRLOC_MAINMENU_UPLOADS,parameters={STR_MODE:MODE_UPLOADS},img=get_icon('youruploads.png'))
         add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS},img=get_icon('yourplaylists.png'))
         add_folder_item(name=STRLOC_MAINMENU_LISTENLATER,parameters={STR_MODE:MODE_LISTENLATER},img=get_icon('listenlater.png'))
-    add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0},img=get_icon('hot.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LOGOFF+'...',parameters={STR_MODE:MODE_LOGOFF})
+    else:
+        add_folder_item(name=STRLOC_MAINMENU_LOGIN,parameters={STR_MODE:MODE_LOGIN})
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
     add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY},img=get_icon('history.png'))
-    add_folder_item(name=STRLOC_MAINMENU_JACKYNIX,parameters={STR_MODE:MODE_JACKYNIX},img=get_icon('jackynix.png'))
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -385,12 +418,12 @@ def check_profile_state():
         log_if_debug('No access_token found')
         ask=True
         while ask:
-            ask=xbmcgui.Dialog().ok('Mixcloud',STRLOC_COMMON_TOKEN_ERROR,STRLOC_COMMON_AUTH_CODE)
+            ask=xbmcgui.Dialog().yesno('Mixcloud', STRLOC_COMMON_TOKEN_ERROR, STRLOC_COMMON_AUTH_CODE)
             if ask:
                 oath_code=get_query(oath_code)
                 __addon__.setSetting('oath_code',oath_code)
                 __addon__.setSetting('access_token','')
-                if oath_code<>'':
+                if oath_code!='':
                     try:
                         values={
                                 'client_id' : STR_CLIENTID,
@@ -400,7 +433,7 @@ def check_profile_state():
                                }
                         headers={
                                  'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-                                 'Referer' : 'http://offliberty.com/'
+                                 'Referer' : 'https://www.mixcloud.com/'
                                 }
                         postdata = urllib.urlencode(values)
                         log_if_debug('Getting access token ' + URL_TOKEN + '?' + postdata)
@@ -418,9 +451,20 @@ def check_profile_state():
                     except:
                         log_always('oath_code failed error=%s' % (sys.exc_info()[1]))
 
-                ask=(access_token=='')
+                ask=((oath_code!='') and (access_token==''))
 
-    return access_token<>''
+    return access_token!=''
+
+
+
+def logoff():
+    global oath_code
+    global access_token
+    if xbmcgui.Dialog().yesno('Mixcloud', STRLOC_MAINMENU_LOGOFF + '?'):
+        oath_code=''
+        access_token=''
+        __addon__.setSetting('oath_code','')
+        __addon__.setSetting('access_token','')
 
 
 
@@ -540,7 +584,7 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
             json_tags=json_cloudcast[STR_TAGS]
             for json_tag in json_tags:
                 if STR_NAME in json_tag and json_tag[STR_NAME]:
-                    if json_genre<>'':
+                    if json_genre!='':
                         json_genre=json_genre+', '
                     json_genre=json_genre+json_tag[STR_NAME]
         infolabels = {STR_COUNT:index,STR_TRACKNUMBER:index,STR_TITLE:json_name,STR_ARTIST:json_username,STR_DURATION:json_length,STR_YEAR:json_year,STR_DATE:json_date,STR_COMMENT:json_comment,STR_GENRE:json_genre}
@@ -559,21 +603,21 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
 def get_stream_offliberty(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Resolving offliberty cloudcast stream for '+ck)
-    for retry in range(1, 10):
+    for retry in range(1, 2):
         try:
             values={
                     'track' : ck,
-                    'refext' : ''
+                    'refext' : 'https://www.google.com/'
                    }
             headers={
                      'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
                      'Referer' : 'http://offliberty.com/'
                     }
             postdata = urllib.urlencode(values)
-            request = urllib2.Request('http://offliberty.com/off54.php', postdata, headers, 'http://offliberty.com/')
+            request = urllib2.Request('http://offliberty.com/off04.php', postdata, headers, 'http://offliberty.com/')
             response = urllib2.urlopen(request)
             data=response.read()
-            match=re.search('HREF="(.*)" class="download"', data)
+            match=re.search('href="(.*)" class="download"', data)
             if match:
                 return match.group(1)
             else:
@@ -586,58 +630,179 @@ def get_stream_offliberty(cloudcast_key):
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Locally resolving cloudcast stream for '+ck)
-    headers={
-             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-             'Referer' : URL_MIXCLOUD
-            }
-    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
-    response = urllib2.urlopen(request)
-    data=response.read()
-    match=re.search('m-p-ref="cloudcast_page" m-play-info="(.*)" m-preview=', data)
-    if match:
-        try:
-            log_if_debug('Decoding '+match.group(1))
-            playInfo=base64.b64decode(match.group(1))
-            magicString=base64.b64decode('cGxlYXNlZG9udGRvd25sb2Fkb3VybXVzaWN0aGVhcnRpc3Rzd29udGdldHBhaWQ=')
-            playInfoJSON=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(playInfo,cycle(magicString)))
-            json_content=json.loads(playInfoJSON)
-            if STR_STREAMURL in json_content and json_content[STR_STREAMURL]:
-                return json_content[STR_STREAMURL]
+    try:
+        headers={
+                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                 'Referer' : URL_MIXCLOUD
+                }
+        request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
+        response = urllib2.urlopen(request)
+        data=response.read()
+        match=re.search('<script id="relay-data" type="text/x-mixcloud">\[(.*)', data)
+        if match:
+            match=re.search('(.*)\]</script>', match.group(1))
+            if match:
+                decoded=match.group(1).replace('&quot;','"')
+                json_content=json.loads(decoded)
+                json_isexclusive=False
+                json_url=None
+                for json_item in json_content:
+                    if STR_CLOUDCASTLOOKUP in json_item and json_item[STR_CLOUDCASTLOOKUP]:
+                        json_cloudcastLookupA = json_item[STR_CLOUDCASTLOOKUP]
+                        if STR_DATA in json_cloudcastLookupA and json_cloudcastLookupA[STR_DATA]:
+                            json_data = json_cloudcastLookupA[STR_DATA]
+                            if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
+                                json_cloudcastLookupB = json_data[STR_CLOUDCASTLOOKUP]
+                                if STR_ISEXCLUSIVE in json_cloudcastLookupB and json_cloudcastLookupB[STR_ISEXCLUSIVE]:
+                                    json_isexclusive = json_cloudcastLookupB[STR_ISEXCLUSIVE]
+                                if STR_STREAMINFO in json_cloudcastLookupB and json_cloudcastLookupB[STR_STREAMINFO]:
+                                    json_streaminfo = json_cloudcastLookupB[STR_STREAMINFO]
+                                    if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
+                                        json_url = json_streaminfo[STR_URL]
+                                    elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
+                                        json_url = json_streaminfo[STR_HLSURL]
+                                    elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
+                                        json_url = json_streaminfo[STR_DASHURL]
+                    if json_url:
+                        break
+
+                if json_url:
+                    log_if_debug('encoded url: '+json_url)
+                    decoded_url=base64.b64decode(json_url)
+                    url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(STR_MAGICSTRING)))
+                    log_if_debug('url: '+url)
+                    return url
+                elif json_isexclusive:
+                    log_if_debug('Cloudcast is exclusive')
+                    return STR_ISEXCLUSIVE
+                else:
+                    log_if_debug('Unable to find url in json')
             else:
-                log_if_debug('Unable to resolve (content)')
-        except:
-            log_always('Unexpected error resolving local error=%s' % (sys.exc_info()[0]))
-    else:
-        log_if_debug('Unable to resolve (match)')
+                log_if_debug('Unable to resolve (match 2)')
+        else:
+            log_if_debug('Unable to resolve (match 1)')
+    except Exception as e:
+        log_if_debug('Unable to resolve: ' + str(e))
+
+
+
+def get_stream_m4a(cloudcast_key):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
+    log_if_debug('Resolving m4a cloudcast stream for '+ck)
+#    headers={
+#             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+#             'Referer' : URL_MIXCLOUD
+#            }
+#    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
+#    response = urllib2.urlopen(request)
+#    data=response.read()
+#    match=re.search('m-preview="(.*)" m-preview-light', data)
+#    if match:
+#        try:
+#            log_if_debug('m-preview = '+match.group(1))
+#            m4aurl=match.group(1).replace('audiocdn','stream')
+#            m4aurl=m4aurl.replace('https/','http')
+#            m4aurl=m4aurl.replace('/previews/','/secure/c/m4a/64/')
+#            m4aurl=m4aurl.replace('mp3','m4a?sig=***TODO***')
+#            log_if_debug('m4a url = '+m4aurl)
+#            return m4aurl
+#        except:
+#            log_always('Unexpected error resolving m4a error=%s' % (sys.exc_info()[0]))
+#    else:
+#        log_if_debug('Unable to resolve (match)')
+
+
+
+def get_stream_mixclouddownloader(cloudcast_key,linknr):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
+    log_if_debug('Resolving mixcloud-downloader cloudcast stream for '+ck)
+    log_if_debug('Link version %d' % linknr)
+    try:
+        headers={
+                    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                    'Referer' : 'http://www.mixcloud-downloader.com/'
+                }
+
+        values={
+                    'url' : ck,
+               }
+        postdata = urllib.urlencode(values)
+        request = urllib2.Request('http://www.mixcloud-downloader.com/download/', postdata, headers, 'http://www.mixcloud-downloader.com/')
+        response = urllib2.urlopen(request)
+        data=response.read()
+        if linknr==1:
+            match=re.search('a class="btn btn-secondary btn-sm"(.*)', data, re.DOTALL)
+            if match:
+                match=re.search('href="(.*)"', match.group(1))
+        if linknr==2:
+            match=re.search('URL from Mixcloud: <br /> <a href="(.*)"', data)
+        if match:
+            log_if_debug('match found ' + match.group(1))
+            return match.group(1)
+        else:
+            log_if_debug('Wrong response code=%s len=%s' % (response.getcode(), len(data)))
+    except Exception as e:
+        log_if_debug('Unable to resolve: ' + str(e))
+
+
+
+def get_stream_mixclouddownloader1(cloudcast_key):
+    return get_stream_mixclouddownloader(cloudcast_key,1)
+
+
+
+def get_stream_mixclouddownloader2(cloudcast_key):
+    return get_stream_mixclouddownloader(cloudcast_key,2)
 
 
 
 def get_stream(cloudcast_key):
-    global resolverid
-    log_if_debug('Resolverid=%s' % (resolverid))
-    resolverid_orig=resolverid
+    global resolverid_curr
+    global resolverid_orig
 
-    resolvers={Resolver.local : get_stream_local,
-               Resolver.offliberty : get_stream_offliberty}
-    strm=resolvers[resolverid](cloudcast_key)
+    if not resolverid_curr in resolver_order:
+        resolverid_curr=resolver_order[0]
 
-    if not strm:
-        log_if_debug('Cannot solve using preferred resolver')
-        dialog=xbmcgui.Dialog()
+    resolver_functions={Resolver.local : get_stream_local,
+                        Resolver.offliberty : get_stream_offliberty,
+                        Resolver.m4a : get_stream_m4a,
+                        Resolver.mixclouddownloader1 : get_stream_mixclouddownloader1,
+                        Resolver.mixclouddownloader2 : get_stream_mixclouddownloader2}
 
-        while (not strm) and dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
-            log_if_debug('Changing resolver')
-		    
-            resolverid=resolverid+1
-            if resolverid>Resolver.offliberty:
-                resolverid=Resolver.local
-            if resolverid==resolverid_orig:
+    strm_url=None
+    strm_isexclusive=False
+    while not (strm_url or xbmc.Monitor().abortRequested()):
+        strm_url=resolver_functions[resolverid_curr](cloudcast_key)
+
+        # local resolver can detect exclusive cloudcasts
+        if strm_url==STR_ISEXCLUSIVE:
+            if resolverid_orig==Resolver.local:
+                strm_isexclusive=True
+            strm_url=None
+
+        # resolver failed
+        if not strm_url:
+            if (resolverid_orig!=Resolver.auto) and (resolverid_curr==resolverid_orig) and (not strm_isexclusive):
+                dialog=xbmcgui.Dialog()
+                if not dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
+                    break
+
+            # try next resolver
+            resolverid_index=resolver_order.index(resolverid_curr)+1
+            if resolverid_index>=len(resolver_order):
+                resolverid_index=0
+            resolverid_curr=resolver_order[resolverid_index]
+
+            # stop when tried all
+            if resolverid_curr==resolverid_orig:
                 break
-            strm=resolvers[resolverid](cloudcast_key)
-            if strm:
-                __addon__.setSetting('resolver',str(resolverid))
+        else:
+            if (resolverid_orig!=Resolver.auto) and (resolverid_curr!=resolverid_orig) and (not strm_isexclusive):
+                __addon__.setSetting('resolver',str(resolverid_curr))
+                resolverid_orig=resolverid_curr
+            
 
-    return strm
+    return strm_url
 
 
 
@@ -804,6 +969,12 @@ log_if_debug("##########################################################")
 	
 if not sys.argv[2] or mode==MODE_HOME:
     ok=show_home_menu()
+elif mode==MODE_LOGIN:
+    check_profile_state()
+    ok=show_home_menu()
+elif mode==MODE_LOGOFF:
+    logoff()
+    ok=show_home_menu()
 elif mode==MODE_FEED:
     ok=show_feed_menu(offset)
 elif mode==MODE_FAVORITES:
@@ -838,9 +1009,15 @@ elif mode==MODE_ADDFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'POST')
 elif mode==MODE_DELFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'DELETE')
-    xbmc.executebuiltin("Container.Update")
+    xbmc.executebuiltin("Container.Refresh")
 elif mode==MODE_ADDFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'POST')
 elif mode==MODE_DELFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'DELETE')
-    xbmc.executebuiltin("Container.Update")
+    xbmc.executebuiltin("Container.Refresh")
+elif mode==MODE_ADDLISTENLATER:
+    ok=favoritefollow(URL_ADDLISTENLATER,key,'POST')
+elif mode==MODE_DELLISTENLATER:
+    ok=favoritefollow(URL_ADDLISTENLATER,key,'DELETE')
+    xbmc.executebuiltin("Container.Refresh")
+

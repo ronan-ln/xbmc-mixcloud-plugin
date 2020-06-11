@@ -4,15 +4,25 @@ KODI Mixcloud Plugin - jackyNIX
 
 ============================================
 
-Contributors:
+Developer:
   - jackyNIX
+  
+============================================
+
+Contributors:
   - Bochi
   - SilentException
   - fleshgolem
+  - gordielachance
+  - understatement
+  - peat8
 
 ============================================
 
-Current version: 2.1.1
+Current version: 2.4.3
+  - Leia
+  - Krypton
+  - Jarvis
   - Isengard
   - Helix
   - Gotham
@@ -28,6 +38,7 @@ Features:
     - Uploads
     - Listen later
     - Playlists
+    - Logoff
   - Browse
     - Trending
     - Categories
@@ -37,6 +48,8 @@ Features:
   - Play cloudcasts
     - Local resolver
     - Offliberty resolver
+    - Mixcloud-Downloader resolver
+    - Low quality m4a resolver (broken)
   - Thumbnails
   - History
     - Played cloudcasts
