@@ -605,19 +605,37 @@ def get_stream_offliberty(cloudcast_key):
     log_if_debug('Resolving offliberty cloudcast stream for '+ck)
     for retry in range(1, 2):
         try:
-            values={
-                    'track' : ck,
-                    'refext' : 'https://www.google.com/'
-                   }
             headers={
                      'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
                      'Referer' : 'http://offliberty.com/'
                     }
-            postdata = urllib.urlencode(values)
-            request = urllib2.Request('http://offliberty.com/off04.php', postdata, headers, 'http://offliberty.com/')
+            values={
+                     'url': ck
+                    }
+            getparams = urllib.urlencode(values)
+            request = urllib2.Request('https://offliberty.online/download?' + getparams, headers=headers)
             response = urllib2.urlopen(request)
             data=response.read()
-            match=re.search('href="(.*)" class="download"', data)
+            match=re.search('href="(.*)" download="', data)
+            if match:
+                return match.group(1)
+            else:
+                log_if_debug('Wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
+        except:
+            log_always('Unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
+
+def get_stream_offliberty(cloudcast_key):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
+    log_if_debug('Resolving offliberty cloudcast stream for '+ck)
+    for retry in range(1, 2):
+        try:
+            headers={
+                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                }
+            request = urllib2.Request('https://offliberty.online/download?url=' + urllib.quote_plus(ck), headers=headers)
+            log_if_debug('https://offliberty.online/download?url=' + urllib.quote_plus(ck))
+            response = urllib2.urlopen(request)
+            data=response.read()
             if match:
                 return match.group(1)
             else:
@@ -626,6 +644,7 @@ def get_stream_offliberty(cloudcast_key):
             log_always('Unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
 
 
+	
 
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
